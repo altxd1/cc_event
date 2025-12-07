@@ -126,6 +126,32 @@ if ($action == 'edit' && $item_id) {
     <title>Manage <?php echo $title; ?> - EventPro Admin</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add this in the <head> section after your CSS links -->
+<style>
+    /* Emergency override for this page */
+    .btn {
+        background-color: #e9ecef !important;
+        color: #495057 !important;
+        border: 2px solid #adb5bd !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin: 5px !important;
+        padding: 10px 20px !important;
+        display: inline-block !important;
+    }
+    
+    .btn-primary {
+        background-color: #6a11cb !important;
+        color: white !important;
+        border-color: #6a11cb !important;
+    }
+    
+    .btn-success {
+        background-color: #28a745 !important;
+        color: white !important;
+        border-color: #28a745 !important;
+    }
+</style>
 </head>
 <body>
     <header>
@@ -175,20 +201,26 @@ if ($action == 'edit' && $item_id) {
                 <?php endif; ?>
                 
                 <!-- Type Tabs -->
-                <div style="margin-bottom: 2rem;">
-                    <a href="?type=food" class="btn <?php echo $type == 'food' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        Food Items
-                    </a>
-                    <a href="?type=places" class="btn <?php echo $type == 'places' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        Event Places
-                    </a>
-                    <a href="?type=designs" class="btn <?php echo $type == 'designs' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        Event Designs
-                    </a>
-                    <a href="?type=<?php echo $type; ?>&action=add" class="btn btn-success" style="float: right;">
-                        <i class="fas fa-plus"></i> Add New
-                    </a>
-                </div>
+               <!-- FIXED TAB NAVIGATION - ALL BUTTONS VISIBLE -->
+<div class="tab-container">
+    <a href="?type=food" class="tab-button <?php echo $type == 'food' ? 'tab-active' : 'tab-inactive'; ?>">
+        <i class="fas fa-utensils"></i> Food Items
+    </a>
+    
+    <a href="?type=places" class="tab-button <?php echo $type == 'places' ? 'tab-active' : 'tab-inactive'; ?>">
+        <i class="fas fa-map-marker-alt"></i> Event Places
+    </a>
+    
+    <a href="?type=designs" class="tab-button <?php echo $type == 'designs' ? 'tab-active' : 'tab-inactive'; ?>">
+        <i class="fas fa-palette"></i> Event Designs
+    </a>
+    
+    <a href="?type=<?php echo $type; ?>&action=add" class="btn btn-success" style="float: right;">
+        <i class="fas fa-plus"></i> Add New
+    </a>
+    
+    <div style="clear: both;"></div>
+</div>
                 
                 <?php if ($action == 'add' || $action == 'edit'): ?>
                     <!-- Add/Edit Form -->

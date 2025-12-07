@@ -54,6 +54,27 @@ $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
     <title>Manage Events - EventPro Admin</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Add this at the TOP of the <head> section in manage_events.php -->
+<!-- Add this in the <head> section after your CSS links -->
+<style>
+    /* Emergency override for this page */
+    .btn {
+        background-color: #e9ecef !important;
+        color: #495057 !important;
+        border: 2px solid #adb5bd !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        margin: 5px !important;
+        padding: 10px 20px !important;
+        display: inline-block !important;
+    }
+    
+    .btn-primary {
+        background-color: #6a11cb !important;
+        color: white !important;
+        border-color: #6a11cb !important;
+    }
+</style>
 </head>
 <body>
     <header>
@@ -100,20 +121,24 @@ $events = mysqli_fetch_all($result, MYSQLI_ASSOC);
                 <?php endif; ?>
                 
                 <!-- Filter Tabs -->
-                <div style="margin-bottom: 2rem;">
-                    <a href="?status=all" class="btn <?php echo $status_filter == 'all' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        All Events (<?php echo count($events); ?>)
-                    </a>
-                    <a href="?status=pending" class="btn <?php echo $status_filter == 'pending' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        Pending (<?php echo count(array_filter($events, fn($e) => $e['status'] == 'pending')); ?>)
-                    </a>
-                    <a href="?status=approved" class="btn <?php echo $status_filter == 'approved' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        Approved (<?php echo count(array_filter($events, fn($e) => $e['status'] == 'approved')); ?>)
-                    </a>
-                    <a href="?status=rejected" class="btn <?php echo $status_filter == 'rejected' ? 'btn-primary' : 'btn-secondary'; ?>">
-                        Rejected (<?php echo count(array_filter($events, fn($e) => $e['status'] == 'rejected')); ?>)
-                    </a>
-                </div>
+<!-- FIXED TAB NAVIGATION - ALL BUTTONS VISIBLE -->
+<div class="tab-container">
+    <a href="?status=all" class="tab-button <?php echo $status_filter == 'all' ? 'tab-active' : 'tab-inactive'; ?>">
+        All Events (<?php echo count($events); ?>)
+    </a>
+    
+    <a href="?status=pending" class="tab-button <?php echo $status_filter == 'pending' ? 'tab-active' : 'tab-inactive'; ?>">
+        Pending (<?php echo count(array_filter($events, fn($e) => $e['status'] == 'pending')); ?>)
+    </a>
+    
+    <a href="?status=approved" class="tab-button <?php echo $status_filter == 'approved' ? 'tab-active' : 'tab-inactive'; ?>">
+        Approved (<?php echo count(array_filter($events, fn($e) => $e['status'] == 'approved')); ?>)
+    </a>
+    
+    <a href="?status=rejected" class="tab-button <?php echo $status_filter == 'rejected' ? 'tab-active' : 'tab-inactive'; ?>">
+        Rejected (<?php echo count(array_filter($events, fn($e) => $e['status'] == 'rejected')); ?>)
+    </a>
+</div>
                 
                 <?php if (empty($events)): ?>
                     <div class="alert alert-info">
