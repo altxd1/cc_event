@@ -1,36 +1,37 @@
 <?php
+// config.php
 session_start();
 
-// Database configuration
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'event_management');
+$DB_HOST = 'localhost';
+$DB_USER = 'root';
+$DB_PASS = ''; // set your DB password
+$DB_NAME = 'event_management';
 
-// Create connection
-$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+// Create mysqli connection
+$mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+if ($mysqli->connect_errno) {
+    die("Database connection failed: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
+}
+$mysqli->set_charset("utf8mb4");
 
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+// helper: sanitize output (XSS protection)
+function e($str) {
+    return htmlspecialchars($str, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
-// Set timezone
-date_default_timezone_set('UTC');
-
-// Helper function to check if user is logged in
-function isLoggedIn() {
-    return isset($_SESSION['user_id']);
+// helper: require login
+function require_login() {
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: login.php');
+        exit;
+    }
 }
 
-// Helper function to check if user is admin
-function isAdmin() {
-    return isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'admin';
-}
-
-// Helper function to sanitize input
-function sanitize($input) {
-    global $conn;
-    return mysqli_real_escape_string($conn, htmlspecialchars(strip_tags(trim($input))));
+// helper: require admin
+function require_admin() {
+    if (!isset($_SESSION['user_id']) || ($_SESSION['user_type'] ?? '') !== 'admin') {
+        header('Location: login.php');
+        exit;
+    }
 }
 ?>
