@@ -1,26 +1,584 @@
-/* style.css - minimal clean design */
-body { font-family: Arial, Helvetica, sans-serif; line-height:1.4; margin:0; background:#f7f7f7; color:#222; }
-header { background:#2b6cb0; color:white; padding:12px 16px; }
-header h1 { margin:0; font-size:20px; display:inline-block;}
-nav { display:inline-block; margin-left:20px; }
-nav a { color:white; text-decoration:none; margin-right:10px; }
-.container { max-width:1000px; margin:20px auto; background:white; padding:18px; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
-label { display:block; margin-bottom:10px; }
-input, textarea, select { width:100%; padding:8px; margin-top:6px; box-sizing:border-box; border:1px solid #ccc; border-radius:4px; }
-button { padding:8px 14px; background:#2b6cb0; color:white; border:none; border-radius:4px; cursor:pointer; }
-button:hover { opacity:0.95; }
-.error { background:#ffe6e6; color:#900; padding:8px; margin-bottom:12px; border-radius:4px; }
-.success { background:#e6ffed; color:#086; padding:8px; margin-bottom:12px; border-radius:4px; }
-.table { width:100%; border-collapse:collapse; margin-top:12px; }
-.table th, .table td { padding:8px; border:1px solid #eee; text-align:left; }
-.cards { display:flex; gap:12px; margin:12px 0; }
-.card { background:#fff; border:1px solid #eee; padding:12px; border-radius:6px; flex:1; text-align:center; }
-.card strong { display:block; margin-bottom:6px; }
-.card div { font-size:1.4em; }
-.card-radio { border:1px solid #eee; padding:8px; margin:8px 0; border-radius:6px; display:flex; gap:10px; align-items:center; }
-.tabs a { margin-right:8px; padding:6px 10px; text-decoration:none; border-radius:4px; background:#f0f0f0; color:#333; }
-.tabs a.active { background:#2b6cb0; color:white; }
-details { margin-top:8px; }
-@media (max-width:700px) {
-  .cards { flex-direction:column; }
+/* ======================== */
+/* FIXED EVENT MANAGEMENT CSS */
+/* ALL BUTTONS VISIBLE - NO TRANSPARENCY */
+/* ======================== */
+
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ======================== */
+/* HEADER STYLES */
+/* ======================== */
+header {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo i {
+    font-size: 2rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* ======================== */
+/* FIXED BUTTON STYLES - ALL VISIBLE ALWAYS */
+/* ======================== */
+.btn {
+    padding: 10px 20px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    transition: all 0.3s !important;
+    margin: 5px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    border: 2px solid !important;
+}
+
+/* Primary Button (Purple) - ACTIVE STATE */
+.btn-primary {
+    background-color: #6a11cb !important;
+    color: white !important;
+    border-color: #6a11cb !important;
+}
+
+.btn-primary:hover {
+    background-color: #5a0db3 !important;
+    border-color: #5a0db3 !important;
+    transform: translateY(-2px);
+}
+
+/* Secondary Button (Light Grey) - INACTIVE STATE */
+.btn-secondary {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+    border-color: #adb5bd !important;
+}
+
+.btn-secondary:hover {
+    background-color: #dee2e6 !important;
+    color: #212529 !important;
+    border-color: #6c757d !important;
+    transform: translateY(-2px);
+}
+
+/* Success Button (Green) */
+.btn-success {
+    background-color: #28a745 !important;
+    color: white !important;
+    border-color: #28a745 !important;
+}
+
+.btn-success:hover {
+    background-color: #218838 !important;
+    border-color: #1e7e34 !important;
+    transform: translateY(-2px);
+}
+
+/* Danger Button (Red) */
+.btn-danger {
+    background-color: #dc3545 !important;
+    color: white !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-danger:hover {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+    transform: translateY(-2px);
+}
+
+/* ======================== */
+/* TAB NAVIGATION FIX */
+/* ======================== */
+.tab-container {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #dee2e6;
+}
+
+.tab-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 5px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    border: 2px solid;
+    transition: all 0.3s;
+}
+
+.tab-inactive {
+    background: #e9ecef;
+    color: #495057;
+    border-color: #adb5bd;
+}
+
+.tab-active {
+    background: #6a11cb;
+    color: white;
+    border-color: #6a11cb;
+}
+
+.tab-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* ======================== */
+/* HERO SECTION */
+/* ======================== */
+.hero {
+    background: linear-gradient(rgba(106, 17, 203, 0.8), rgba(37, 117, 252, 0.8));
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 5rem 0;
+    margin-bottom: 3rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+/* ======================== */
+/* SERVICES SECTION */
+/* ======================== */
+.services {
+    padding: 4rem 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: #333;
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #6a11cb;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.service-card {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+}
+
+.service-icon {
+    font-size: 3rem;
+    color: #6a11cb;
+    margin-bottom: 1rem;
+}
+
+.service-card h3 {
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* ======================== */
+/* FORMS */
+/* ======================== */
+.form-container {
+    max-width: 500px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #6a11cb;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+}
+
+/* ======================== */
+/* DASHBOARD */
+/* ======================== */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.sidebar {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-nav ul {
+    list-style: none;
+}
+
+.sidebar-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-nav a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
+    background-color: #6a11cb;
+    color: white;
+}
+
+.dashboard-content {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ======================== */
+/* TABLES */
+/* ======================== */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #6a11cb;
+}
+
+tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* ======================== */
+/* EVENT CREATION FORM */
+/* ======================== */
+.event-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-section {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.form-section h3 {
+    margin-bottom: 1rem;
+    color: #6a11cb;
+}
+
+/* ======================== */
+/* CARDS */
+/* ======================== */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img {
+    height: 200px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-title {
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.card-price {
+    color: #6a11cb;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+/* ======================== */
+/* ALERT MESSAGES */
+/* ======================== */
+.alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* ======================== */
+/* FOOTER */
+/* ======================== */
+footer {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+/* ======================== */
+/* RESPONSIVE DESIGN */
+/* ======================== */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .dashboard-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+    }
+}
+
+/* ======================== */
+/* UTILITY CLASSES */
+/* ======================== */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 1rem; }
+.mt-2 { margin-top: 2rem; }
+.mt-3 { margin-top: 3rem; }
+.mb-1 { margin-bottom: 1rem; }
+.mb-2 { margin-bottom: 2rem; }
+.mb-3 { margin-bottom: 3rem; }
+.hidden { display: none; }
+
+/* ======================== */
+/* EMERGENCY OVERRIDES */
+/* ======================== */
+/* Force visibility for ALL buttons in admin pages */
+.dashboard-content a.btn,
+.dashboard-content button.btn {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+}
+
+/* Override any hidden/transparent states */
+a[class*="btn"], button[class*="btn"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ========================================== */
+/* VERTICAL SIDEBAR FIX */
+/* ========================================== */
+
+/* Force vertical layout */
+.sidebar-nav ul {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+}
+
+.sidebar-nav li {
+    width: 100% !important;
+    display: block !important;
+}
+
+/* Links with icon + text */
+.sidebar-nav a {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 12px 16px !important;
+}
+
+/* Icon spacing */
+.sidebar-nav a i {
+    margin-right: 12px !important;
+    width: 20px !important;
+}
+
+/* Remove horizontal layouts */
+.sidebar-nav ul,
+.sidebar-nav li {
+    flex-direction: column !important;
 }
