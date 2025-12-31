@@ -20,9 +20,11 @@
             padding: 10px 20px !important;
             display: inline-block !important;
         }
-        .btn-primary { background-color:#6a11cb !important; color:white !important; border-color:#6a11cb !important; }
-        .btn-success { background-color:#28a745 !important; color:white !important; border-color:#28a745 !important; }
-        .btn-danger  { background-color:#dc3545 !important; color:white !important; border-color:#dc3545 !important; }
+        .btn-primary {
+            background-color: #6a11cb !important;
+            color: white !important;
+            border-color: #6a11cb !important;
+        }
     </style>
 </head>
 <body>
@@ -32,7 +34,6 @@
             <i class="fas fa-glass-cheers"></i>
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">EventPro</a>
         </div>
-
         <nav>
             <ul>
                 <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
@@ -40,7 +41,6 @@
                 <li><a href="{{ route('admin.items', ['type' => 'food']) }}">Manage Items</a></li>
             </ul>
         </nav>
-
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">Admin Panel</span>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">

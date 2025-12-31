@@ -12,7 +12,7 @@ Route::post('/login', [AuthController::class, 'store'])->name('login');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Temporary placeholders (until we convert real pages)
+
 Route::view('/', 'welcome');
 Route::view('/dashboard', 'dashboard');
 Route::view('/admin', 'admin');

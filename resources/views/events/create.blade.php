@@ -13,12 +13,12 @@
     <div class="container header-container">
         <div class="logo">
             <i class="fas fa-glass-cheers"></i>
-            <a href="{{ url('/') }}" style="color: white; text-decoration: none;">EventPro</a>
+            <a href="/" style="color: white; text-decoration: none;">EventPro</a>
         </div>
 
         <nav>
             <ul>
-                <li><a href="{{ url('/') }}">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
             </ul>
         </nav>
@@ -185,6 +185,20 @@
     </form>
 </div>
 
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="logo">
+                <i class="fas fa-glass-cheers"></i>
+                <span>EventPro</span>
+            </div>
+            <div>
+                <p>&copy; 2024 EventPro. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     function calculatePrice() {
@@ -195,3 +209,33 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedDesign = document.querySelector('input[name="design_id"]:checked');
 
         if (selectedPlace && selectedFood && selectedDesign) {
+            const placePrice = parseFloat(selectedPlace.dataset.price || '0');
+            const foodPrice = parseFloat(selectedFood.dataset.pricePerPerson || '0');
+            const designPrice = parseFloat(selectedDesign.dataset.price || '0');
+
+            const total = placePrice + (foodPrice * guests) + designPrice;
+
+            document.getElementById('price-summary').innerHTML = `
+                <div style="font-size: 1.2rem;">
+                    <p>Venue: $${placePrice.toFixed(2)}</p>
+                    <p>Food (${guests} guests × $${foodPrice.toFixed(2)}): $${(foodPrice * guests).toFixed(2)}</p>
+                    <p>Design: $${designPrice.toFixed(2)}</p>
+                    <hr>
+                    <p style="font-weight: bold; font-size: 1.5rem; color: #6a11cb;">
+                        Total: $${total.toFixed(2)}
+                    </p>
+                </div>
+            `;
+        }
+    }
+
+    document.getElementById('guests').addEventListener('input', calculatePrice);
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', calculatePrice);
+    });
+
+    calculatePrice();
+});
+</script>
+</body>
+</html>
