@@ -13,22 +13,22 @@
     <div class="container header-container">
         <div class="logo">
             <i class="fas fa-glass-cheers"></i>
-            <span>EventPro</span>
+            <a href="{{ url('/') }}" style="color: white; text-decoration: none;">EventPro</a>
         </div>
 
         <nav>
             <ul>
                 <li><a href="{{ url('/') }}">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="{{ url('/#services') }}">Services</a></li>
+                <li><a href="{{ url('/#about') }}">About</a></li>
+                <li><a href="{{ url('/#contact') }}">Contact</a></li>
             </ul>
         </nav>
 
         <div class="auth-buttons">
             @if (function_exists('isLoggedIn') && isLoggedIn())
                 @if (function_exists('isAdmin') && isAdmin())
-                    <a href="{{ url('/admin') }}" class="btn btn-primary">Admin Dashboard</a>
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Admin Dashboard</a>
                 @else
                     <a href="{{ route('dashboard') }}" class="btn btn-primary">My Dashboard</a>
                 @endif
@@ -39,17 +39,16 @@
                 </form>
             @else
                 <a href="{{ route('login.form') }}" class="btn btn-primary">Login</a>
-                <a href="{{ url('/register') }}" class="btn btn-secondary">Register</a>
+                <a href="{{ route('register.form') }}" class="btn btn-secondary">Register</a>
             @endif
         </div>
     </div>
 </header>
-
-<section class="hero">
-    <div class="container">
+<section class="hero hero-bg"
+    style="background-image: url('{{ asset('images/home.jpeg') }}');">
+    <div class="container hero-content">
         <h1>Create Unforgettable Events</h1>
-        <p>From intimate gatherings to grand celebrations, we handle every detail with perfection. Your dream event, our expertise.</p>
-
+        <p>From intimate gatherings to grand celebrations, we handle every detail with perfection.</p>
         @if (! (function_exists('isLoggedIn') && isLoggedIn()))
             <a href="{{ url('/register') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
                 Get Started <i class="fas fa-arrow-right"></i>
@@ -70,40 +69,48 @@
         </div>
 
         <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-map-marker-alt"></i></div>
+            {{-- Venue --}}
+            <div class="service-card service-card--slideshow"
+                 data-images="{{ asset('images/services/venue-1.jpeg') }},{{ asset('images/services/venue-2.jpeg') }},{{ asset('images/services/venue-3.jpeg') }}">
+                <div class="service-media">
+                    <img src="{{ asset('images/services/venue-1.jpeg') }}" alt="Venue Selection">
+                    <div class="service-icon"><i class="fas fa-map-marker-alt"></i></div>
+                </div>
                 <h3>Venue Selection</h3>
                 <p>Choose from our curated list of beautiful venues, each with unique charm and amenities.</p>
             </div>
 
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-utensils"></i></div>
+            {{-- Catering --}}
+            <div class="service-card service-card--slideshow"
+                 data-images="{{ asset('images/services/catering-1.jpeg') }},{{ asset('images/services/catering-2.jpeg') }},{{ asset('images/services/catering-3.jpeg') }}">
+                <div class="service-media">
+                    <img src="{{ asset('images/services/catering-1.jpeg') }}" alt="Catering Services">
+                    <div class="service-icon"><i class="fas fa-utensils"></i></div>
+                </div>
                 <h3>Catering Services</h3>
                 <p>Delicious menus crafted by expert chefs, customizable to your taste and dietary needs.</p>
             </div>
 
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-palette"></i></div>
+            {{-- Design --}}
+            <div class="service-card service-card--slideshow"
+                 data-images="{{ asset('images/services/desing-1.jpeg') }},{{ asset('images/services/desing-2.jpeg') }},{{ asset('images/services/desing-3.jpeg') }}">
+                <div class="service-media">
+                    <img src="{{ asset('images/services/desing-1.jpeg') }}" alt="Event Design">
+                    <div class="service-icon"><i class="fas fa-palette"></i></div>
+                </div>
                 <h3>Event Design</h3>
                 <p>Transform your venue with our stunning decoration themes and design concepts.</p>
             </div>
 
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-users"></i></div>
+            {{-- Guests --}}
+            <div class="service-card service-card--slideshow"
+                 data-images="{{ asset('images/services/guest-1.jpeg') }},{{ asset('images/services/guest-2.jpeg') }},{{ asset('images/services/guest-3.jpeg') }}">
+                <div class="service-media">
+                    <img src="{{ asset('images/services/guest-1.jpeg') }}" alt="Guest Management">
+                    <div class="service-icon"><i class="fas fa-users"></i></div>
+                </div>
                 <h3>Guest Management</h3>
                 <p>Comprehensive guest list management and seating arrangements for smooth events.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-check-circle"></i></div>
-                <h3>One-Stop Solution</h3>
-                <p>From planning to execution, we handle every aspect of your event seamlessly.</p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-icon"><i class="fas fa-headset"></i></div>
-                <h3>24/7 Support</h3>
-                <p>Round-the-clock assistance to ensure your event runs perfectly from start to finish.</p>
             </div>
         </div>
     </div>
@@ -169,5 +176,53 @@
         </div>
     </div>
 </footer>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("services slideshow script loaded");
+
+    const cards = document.querySelectorAll('.service-card--slideshow');
+    console.log("cards found:", cards.length);
+
+    cards.forEach((card, idx) => {
+        const img = card.querySelector('.service-media img');
+        const list = (card.dataset.images || '')
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean);
+
+        console.log("card", idx, "images:", list);
+
+        if (!img || list.length < 2) return;
+
+        list.forEach(src => { const i = new Image(); i.src = src; });
+
+        let index = 0;
+        let timer = null;
+
+        const start = () => {
+            console.log("mouseenter on card", idx);
+            if (timer) return;
+            timer = setInterval(() => {
+                index = (index + 1) % list.length;
+                img.src = list[index];
+                console.log("changed to:", img.src);
+            }, 3000);
+        };
+
+        const stop = () => {
+            console.log("mouseleave on card", idx);
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+            index = 0;
+            img.src = list[0];
+        };
+
+        card.addEventListener('mouseenter', start);
+        card.addEventListener('mouseleave', stop);
+    });
+});
+</script>
 </body>
 </html>

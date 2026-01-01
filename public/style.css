@@ -34,10 +34,11 @@ header {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.header-container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 1rem;
 }
 
 .logo {
@@ -581,4 +582,97 @@ a[class*="btn"], button[class*="btn"] {
 .sidebar-nav ul,
 .sidebar-nav li {
     flex-direction: column !important;
+}
+
+.service-card{
+    overflow: hidden;
+}
+
+.service-media{
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: #111;
+}
+
+.service-media img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 300ms ease;
+}
+
+.service-card:hover .service-media img{
+    transform: scale(1.03);
+}
+
+.service-media .service-icon{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.services-grid{
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+@media (min-width: 992px){
+    .services-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .service-media{
+        height: 340px;
+    }
+    /* Cards cliquables */
+.select-card{
+  cursor: pointer;
+  position: relative;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  border: 2px solid transparent;
+}
+
+.select-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,.10);
+}
+
+.select-card.is-selected{
+  border-color: #6a11cb;
+  box-shadow: 0 10px 30px rgba(106,17,203,.25);
+}
+
+.select-card .select-radio{
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Badge Selected */
+.selected-badge{
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #6a11cb;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  display: none;
+}
+
+.select-card.is-selected .selected-badge{
+  display: inline-block;
 }
