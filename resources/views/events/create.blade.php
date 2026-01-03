@@ -271,12 +271,12 @@
                                 <div class="ce-selected">Selected</div>
 
                                 <div class="ce-media">
-                                    @if ($img)
-                                        <img src="{{ $img }}" alt="{{ $place->place_name }}">
-                                    @else
-                                        <div class="ce-fallback"><i class="fas fa-building"></i></div>
-                                    @endif
-                                </div>
+                                    <img
+                                       src="{{ asset('images/venues/venue-'.$place->place_id.'.jpeg') }}"
+                                       alt="{{ $place->place_name }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('images/venues/default.jpeg') }}';"
+                                      >
+                                        </div>
 
                                 <div class="ce-body">
                                     <h4 class="ce-title">{{ $place->place_name }}</h4>
@@ -301,10 +301,7 @@
 
                     <div class="ce-grid">
                         @foreach ($foodItems as $food)
-                            @php
-                                $img = !empty($food->image_path) ? asset('storage/'.$food->image_path) : null;
-                                $pp = (float)$food->price_per_person;
-                            @endphp
+                    
 
                             <div class="ce-card select-card"
                                  data-group="food"
@@ -314,12 +311,12 @@
                                 <div class="ce-selected">Selected</div>
 
                                 <div class="ce-media">
-                                    @if ($img)
-                                        <img src="{{ $img }}" alt="{{ $food->food_name }}">
-                                    @else
-                                        <div class="ce-fallback"><i class="fas fa-hamburger"></i></div>
-                                    @endif
-                                </div>
+                                 <img
+                                    src="{{ asset('images/foods/food-'.$food->food_id.'.jpeg') }}"
+                                    alt="{{ $food->food_name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('images/foods/default.jpeg') }}';"
+                                        >
+                                        </div>
 
                                 <div class="ce-body">
                                     <h4 class="ce-title">{{ $food->food_name }}</h4>
@@ -356,12 +353,12 @@
                                 <div class="ce-selected">Selected</div>
 
                                 <div class="ce-media">
-                                    @if ($img)
-                                        <img src="{{ $img }}" alt="{{ $design->design_name }}">
-                                    @else
-                                        <div class="ce-fallback"><i class="fas fa-paint-brush"></i></div>
-                                    @endif
-                                </div>
+                                <img
+                                    src="{{ asset('images/designs/design-'.$design->design_id.'.jpeg') }}"
+                                    alt="{{ $design->design_name }}"
+                                    onerror="this.onerror=null; this.src='{{ asset('images/designs/default.jpeg') }}';"
+                                >
+                            </div>
 
                                 <div class="ce-body">
                                     <h4 class="ce-title">{{ $design->design_name }}</h4>
