@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminEventsController;
 use App\Http\Controllers\AdminItemsController;
+
 Route::get('/login', [AuthController::class, 'create'])->name('login.form');
 Route::post('/login', [AuthController::class, 'store'])->name('login');
 

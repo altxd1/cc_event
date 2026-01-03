@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventPro - Professional Event Management</title>
+    <title>BMW Events - Professional Event Management</title>
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,7 +13,7 @@
     <div class="container header-container">
         <div class="logo">
             <i class="fas fa-glass-cheers"></i>
-            <a href="{{ url('/') }}" style="color: white; text-decoration: none;">EventPro</a>
+            <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
 
         <nav>
@@ -164,14 +164,14 @@
         <div class="footer-content">
             <div class="logo">
                 <i class="fas fa-glass-cheers"></i>
-                <span>EventPro</span>
+                <span>BMW Events </span>
             </div>
             <div>
-                <p>Contact us: info@eventpro.com | +1 (555) 123-4567</p>
-                <p>123 Event Street, Celebration City, EC 12345</p>
+                <p>Contact us: wissalevent@gmail.com| +212 708090405</p>
+                <p>Hay rabat , Tangier City, Rue N 7 </p>
             </div>
             <div>
-                <p>&copy; 2024 EventPro. All rights reserved.</p>
+                <p>&copy; 2026 BMW Events. All rights reserved.</p>
             </div>
         </div>
     </div>

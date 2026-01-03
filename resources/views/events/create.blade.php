@@ -3,173 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Event - EventPro</title>
+    <title>Create Event - BMW Events</title>
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <style>
-        /* ---- Create Event layout ---- */
-        .ce-wrap{ margin-top: 1.5rem; }
-        .ce-layout{
-            display: grid;
-            grid-template-columns: 1fr 360px;
-            gap: 1.5rem;
-            align-items: start;
-        }
-        @media (max-width: 992px){
-            .ce-layout{ grid-template-columns: 1fr; }
-        }
-
-        .ce-panel{
-            background: #fff;
-            border-radius: 16px;
-            padding: 1.2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,.06);
-            border: 1px solid rgba(0,0,0,.06);
-        }
-
-        .ce-aside{
-            position: sticky;
-            top: 1rem;
-        }
-
-        .ce-grid{
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 1rem;
-        }
-        @media (max-width: 1200px){
-            .ce-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        }
-        @media (max-width: 600px){
-            .ce-grid{ grid-template-columns: 1fr; }
-        }
-
-        /* ---- selectable cards ---- */
-        .ce-card{
-            cursor: pointer;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 2px solid transparent;
-            background: #fff;
-            transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,.05);
-            position: relative;
-        }
-        .ce-card:hover{
-            transform: translateY(-2px);
-            box-shadow: 0 14px 26px rgba(0,0,0,.10);
-        }
-        .ce-card.is-selected{
-            border-color: #6a11cb;
-            box-shadow: 0 16px 32px rgba(106,17,203,.22);
-        }
-
-        .ce-badge{
-            position:absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(0,0,0,.55);
-            color:#fff;
-            padding: 8px 10px;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 12px;
-            z-index: 2;
-            backdrop-filter: blur(4px);
-        }
-        .ce-selected{
-            position:absolute;
-            top: 12px;
-            right: 12px;
-            background: #6a11cb;
-            color:#fff;
-            padding: 8px 10px;
-            border-radius: 999px;
-            font-weight: 900;
-            font-size: 12px;
-            z-index: 2;
-            display:none;
-        }
-        .ce-card.is-selected .ce-selected{ display:block; }
-
-        .ce-media{
-            height: 170px;
-            background: #111;
-            position: relative;
-        }
-        .ce-media img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display:block;
-            filter: saturate(1.05);
-        }
-        .ce-media .ce-fallback{
-            height: 100%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color: rgba(255,255,255,.95);
-            font-size: 2rem;
-        }
-        .ce-media::after{
-            content:"";
-            position:absolute;
-            inset:0;
-            background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
-            pointer-events:none;
-        }
-
-        .ce-body{ padding: .9rem 1rem 1rem; }
-        .ce-title{ margin:0 0 .35rem 0; font-weight: 900; }
-        .ce-desc{ margin:0; color:#6c757d; font-size: .93rem; }
-
-        .ce-radio{
-            position:absolute;
-            opacity:0;
-            pointer-events:none;
-        }
-
-        /* ---- Summary ---- */
-        .sum-title{ margin:0 0 .8rem 0; font-weight: 900; }
-        .sum-line{
-            display:flex;
-            justify-content:space-between;
-            gap: .8rem;
-            margin: .45rem 0;
-        }
-        .sum-line small{ color:#6c757d; display:block; }
-        .sum-total{
-            margin-top: .85rem;
-            padding-top: .85rem;
-            border-top: 1px solid rgba(0,0,0,.08);
-            display:flex;
-            justify-content:space-between;
-            align-items: baseline;
-        }
-        .sum-total .value{
-            font-size: 1.35rem;
-            font-weight: 900;
-            color:#6a11cb;
-        }
-        .sum-warning{
-            margin-top: .75rem;
-            padding: .65rem .8rem;
-            border-radius: 12px;
-            background: #fff3cd;
-            border: 1px solid #ffeeba;
-            color: #856404;
-            font-weight: 800;
-            display:none;
-        }
-        .sum-hint{
-            margin-top: .75rem;
-            color:#6c757d;
-            font-size: .9rem;
-        }
-    </style>
 </head>
 <body>
 <header>
@@ -301,7 +139,10 @@
 
                     <div class="ce-grid">
                         @foreach ($foodItems as $food)
-                    
+                            @php
+                                $img = !empty($food->image_path) ? asset('storage/'.$food->image_path) : null;
+                                $pp = (float)$food->price_per_person;
+                            @endphp
 
                             <div class="ce-card select-card"
                                  data-group="food"
@@ -436,10 +277,10 @@
         <div class="footer-content">
             <div class="logo">
                 <i class="fas fa-glass-cheers"></i>
-                <span>EventPro</span>
+                <span>BMW Events</span>
             </div>
             <div>
-                <p>&copy; 2024 EventPro. All rights reserved.</p>
+                <p>&copy; 2026 BMW Events. All rights reserved.</p>
             </div>
         </div>
     </div>

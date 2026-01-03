@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Events - EventPro Admin</title>
+    <title>Manage Events - BMW Events Admin</title>
 
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -208,10 +208,10 @@
         <div class="footer-content">
             <div class="logo">
                 <i class="fas fa-glass-cheers"></i>
-                <span>EventPro</span>
+                <span>BMW Events</span>
             </div>
             <div>
-                <p>&copy; 2024 EventPro. All rights reserved.</p>
+                <p>&copy; 2026 BMW Events. All rights reserved.</p>
             </div>
         </div>
     </div>

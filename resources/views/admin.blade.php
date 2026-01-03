@@ -225,10 +225,10 @@
         <div class="footer-content">
             <div class="logo">
                 <i class="fas fa-glass-cheers"></i>
-                <span>EventPro</span>
+                <span>BMW Events</span>
             </div>
             <div>
-                <p>&copy; 2024 EventPro. All rights reserved.</p>
+                <p>&copy; 2026 BMW Events. All rights reserved.</p>
             </div>
         </div>
     </div>
