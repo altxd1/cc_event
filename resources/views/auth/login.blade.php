@@ -15,7 +15,6 @@
             <i class="fas fa-glass-cheers"></i>
             <a href="/" style="color: white; text-decoration: none;">EventPro</a>
         </div>
-
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>

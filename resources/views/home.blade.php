@@ -50,14 +50,20 @@
         <h1>Create Unforgettable Events</h1>
         <p>From intimate gatherings to grand celebrations, we handle every detail with perfection.</p>
         @if (! (function_exists('isLoggedIn') && isLoggedIn()))
-            <a href="{{ url('/register') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
-                Get Started <i class="fas fa-arrow-right"></i>
-            </a>
-        @else
-            <a href="{{ route('events.create') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
-                Create New Event <i class="fas fa-calendar-plus"></i>
-            </a>
-        @endif
+    <a href="{{ url('/register') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+        Get Started <i class="fas fa-arrow-right"></i>
+    </a>
+            @else
+                @if (function_exists('isAdmin') && isAdmin())
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                        Go to Admin Dashboard <i class="fas fa-gauge-high"></i>
+                    </a>
+                @else
+                    <a href="{{ route('events.create') }}" class="btn btn-primary" style="font-size: 1.2rem; padding: 1rem 2rem;">
+                        Create New Event <i class="fas fa-calendar-plus"></i>
+                    </a>
+                @endif
+            @endif
     </div>
 </section>
 
