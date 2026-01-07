@@ -8,6 +8,60 @@
     <link rel="stylesheet" href="{{ asset('style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+    <style>
+    /* Availability status styles */
+    .availability-alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin: 15px 0;
+        border: 1px solid transparent;
+        display: none;
+    }
+
+    .availability-alert.success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+        display: block;
+    }
+
+    .availability-alert.error {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+        display: block;
+    }
+
+    .availability-alert.info {
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+        color: #0c5460;
+        display: block;
+    }
+
+    .availability-alert.warning {
+        background-color: #fff3cd;
+        border-color: #ffeaa7;
+        color: #856404;
+        display: block;
+    }
+
+    .fa-spinner {
+        margin-right: 10px;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Disable submit button when venue is booked */
+    button[type="submit"]:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    </style>
 </head>
 <body>
 <header>
@@ -53,8 +107,11 @@
     <div class="ce-layout" style="margin-top: 1rem;">
         {{-- MAIN FORM --}}
         <div class="ce-panel">
-            <form method="POST" action="{{ route('events.store') }}">
+            <form method="POST" action="{{ route('events.store') }}" id="eventForm">
                 @csrf
+
+                {{-- AVAILABILITY CHECK --}}
+                <div id="availability-status" class="availability-alert" style="display: none;"></div>
 
                 <div class="form-section" style="padding:0; border:none;">
                     <h3><i class="fas fa-info-circle"></i> Event Information</h3>
@@ -229,7 +286,7 @@
                 </div>
 
                 <div class="text-center mt-3">
-                    <button type="submit" class="btn btn-success" style="padding: 1rem 3rem; font-size: 1.1rem;">
+                    <button type="submit" class="btn btn-success" id="submit-btn" style="padding: 1rem 3rem; font-size: 1.1rem;">
                         <i class="fas fa-check-circle"></i> Submit Event Request
                     </button>
                     <a href="{{ route('dashboard') }}" class="btn btn-secondary" style="padding: 1rem 3rem; font-size: 1.1rem;">
@@ -290,6 +347,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     const cards = document.querySelectorAll('.select-card');
     const guestsEl = document.getElementById('guests');
+    const eventDateEl = document.getElementById('event_date');
+    const eventTimeEl = document.getElementById('event_time');
+    const submitBtn = document.getElementById('submit-btn');
+    const form = document.getElementById('eventForm');
 
     const sumPlaceName = document.getElementById('sum-place-name');
     const sumPlacePrice = document.getElementById('sum-place-price');
@@ -299,6 +360,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const sumDesignPrice = document.getElementById('sum-design-price');
     const sumTotal = document.getElementById('sum-total');
     const capWarn = document.getElementById('cap-warning');
+    
+    const availabilityStatus = document.getElementById('availability-status');
+    let checkTimeout;
 
     function money(x){
         const n = Number(x || 0);
@@ -373,6 +437,128 @@ document.addEventListener('DOMContentLoaded', function () {
             capWarn.style.display = 'none';
             capWarn.textContent = '';
         }
+        
+        // Trigger availability check when place, date, or time changes
+        checkPlaceAvailability();
+    }
+
+    function checkPlaceAvailability() {
+        const placeId = document.querySelector('input[name="place_id"]:checked')?.value;
+        const eventDate = eventDateEl?.value;
+        const eventTime = eventTimeEl?.value;
+        
+        if (!placeId || !eventDate || !eventTime) {
+            if (availabilityStatus) {
+                availabilityStatus.style.display = 'none';
+            }
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Submit Event Request';
+            }
+            return;
+        }
+
+        // Clear previous timeout
+        clearTimeout(checkTimeout);
+
+        // Show loading state
+        if (availabilityStatus) {
+            availabilityStatus.className = 'availability-alert info';
+            availabilityStatus.innerHTML = '<i class="fas fa-spinner"></i> Checking availability...';
+            availabilityStatus.style.display = 'block';
+        }
+        
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        }
+
+        // Debounce the API call
+        checkTimeout = setTimeout(() => {
+            fetch('{{ route("events.check-availability") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    place_id: placeId,
+                    event_date: eventDate,
+                    event_time: eventTime
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.available) {
+                    availabilityStatus.className = 'availability-alert success';
+                    availabilityStatus.innerHTML = `
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-check-circle" style="color:green; font-size:1.2em;"></i>
+                            <div>
+                                <strong>Available!</strong>
+                                <p style="margin:5px 0 0 0; font-size:0.9em;">
+                                    This venue is available for your selected date and time.
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Submit Event Request';
+                    }
+                } else {
+                    availabilityStatus.className = 'availability-alert error';
+                    let conflictsHtml = `
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <i class="fas fa-times-circle" style="color:red; font-size:1.2em;"></i>
+                            <div>
+                                <strong>Already Booked!</strong>
+                                <p style="margin:5px 0 0 0; font-size:0.9em;">
+                                    This venue is already booked for your selected date and time.
+                                </p>
+                    `;
+                    
+                    if (data.conflicts && data.conflicts.length > 0) {
+                        conflictsHtml += '<div style="margin-top:10px; font-size:0.85em;">';
+                        conflictsHtml += '<strong>Existing booking(s):</strong>';
+                        conflictsHtml += '<ul style="margin:5px 0 0 20px; padding:0;">';
+                        data.conflicts.forEach(conflict => {
+                            conflictsHtml += `<li>
+                                <strong>${conflict.event_name}</strong> 
+                                (${conflict.event_date} at ${conflict.event_time})<br>
+                                <small>Status: ${conflict.status}</small>
+                            </li>`;
+                        });
+                        conflictsHtml += '</ul></div>';
+                    }
+                    
+                    conflictsHtml += '</div></div>';
+                    availabilityStatus.innerHTML = conflictsHtml;
+                    
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="fas fa-times-circle"></i> Venue Booked - Cannot Submit';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error checking availability:', error);
+                availabilityStatus.className = 'availability-alert warning';
+                availabilityStatus.innerHTML = 'Unable to check availability. Please try again.';
+                
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Submit Event Request';
+                }
+            });
+        }, 500); // 500ms debounce
     }
 
     cards.forEach(card => {
@@ -394,6 +580,29 @@ document.addEventListener('DOMContentLoaded', function () {
     if (guestsEl) {
         guestsEl.addEventListener('input', renderSummary);
         guestsEl.addEventListener('change', renderSummary);
+    }
+    
+    if (eventDateEl) {
+        eventDateEl.addEventListener('change', renderSummary);
+    }
+    
+    if (eventTimeEl) {
+        eventTimeEl.addEventListener('change', renderSummary);
+    }
+
+    // Also check on form submit (extra protection)
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const placeId = document.querySelector('input[name="place_id"]:checked')?.value;
+            const eventDate = eventDateEl?.value;
+            const eventTime = eventTimeEl?.value;
+            
+            if (placeId && eventDate && eventTime && submitBtn && submitBtn.disabled) {
+                e.preventDefault();
+                alert('This venue is already booked. Please select a different date, time, or venue.');
+                return false;
+            }
+        });
     }
 
     syncSelectedFromRadios();

@@ -17,13 +17,13 @@
         </div>
 
         <nav>
-            <ul>
-                <li><a href="{{ url('/') }}">Home</a></li>
-                <li><a href="{{ url('/#services') }}">Services</a></li>
-                <li><a href="{{ url('/#about') }}">About</a></li>
-                <li><a href="{{ url('/#contact') }}">Contact</a></li>
-            </ul>
-        </nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ route('events.create') }}">Create Event</a></li>
+        <li><a href="{{ route('calendar.index') }}">Calendar</a></li> <!-- Add this line -->
+    </ul>
+    </nav>
 
         <div class="auth-buttons">
             @if (function_exists('isLoggedIn') && isLoggedIn())

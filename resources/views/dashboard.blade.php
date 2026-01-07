@@ -35,6 +35,35 @@
         </div>
     </div>
 </header>
+<!-- Add this section to your dashboard -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i> Calendar Overview</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <p>View venue availability and booked dates in the calendar.</p>
+                <a href="{{ route('calendar.index') }}" class="btn btn-primary">
+                    <i class="fas fa-calendar me-2"></i> View Full Calendar
+                </a>
+                <a href="{{ route('events.create') }}" class="btn btn-success ms-2">
+                    <i class="fas fa-plus-circle me-2"></i> Book New Event
+                </a>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="display-6 fw-bold text-primary">
+                        {{ \App\Models\Event::whereIn('status', ['approved', 'pending'])
+                            ->whereMonth('event_date', date('m'))
+                            ->count() }}
+                    </div>
+                    <small class="text-muted">Events this month</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="dashboard-container">

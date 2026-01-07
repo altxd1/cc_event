@@ -34,13 +34,14 @@
             <i class="fas fa-glass-cheers"></i>
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
-        <nav>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.events.index') }}" class="active">Manage Events</a></li>
-                <li><a href="{{ route('admin.items', ['type' => 'food']) }}">Manage Items</a></li>
-            </ul>
-        </nav>
+       <nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ route('events.create') }}">Create Event</a></li>
+        <li><a href="{{ route('calendar.index') }}">Calendar</a></li> <!-- Add this line -->
+    </ul>
+</nav>
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">Admin Panel</span>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
