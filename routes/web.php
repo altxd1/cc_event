@@ -9,6 +9,8 @@ use App\Http\Controllers\AdminEventsController;
 use App\Http\Controllers\AdminItemsController;
 use App\Http\Controllers\CalendarController;
 
+use App\Http\Controllers\AdminCalendarController;
+
 // Public routes
 Route::view('/', 'home')->name('home'); // If you have home.blade.php
 Route::get('/', function() { return view('home'); })->name('home');
@@ -58,4 +60,12 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 Route::middleware('login')->group(function () {
     Route::get('/calendar', [CalendarController::class, 'index'])->name('calendar.index');
     Route::get('/calendar/day/{date}', [CalendarController::class, 'dayView'])->name('calendar.day');
+});
+
+
+// Admin Calendar Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    // Calendar routes
+    Route::get('/calendar', [AdminCalendarController::class, 'index'])->name('admin.calendar.index');
+    Route::get('/calendar/day/{date}', [AdminCalendarController::class, 'showDay'])->name('admin.calendar.day');
 });

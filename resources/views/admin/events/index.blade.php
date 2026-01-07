@@ -33,13 +33,17 @@
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
 
-        <nav>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.events.index') }}" class="active">Manage Events</a></li>
-                <li><a href="{{ route('admin.items', ['type' => 'food']) }}">Manage Items</a></li>
-            </ul>
-        </nav>
+        {{-- In the sidebar section of index.blade.php --}}
+<nav class="sidebar-nav">
+    <ul>
+        <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events.*') && !request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
+        <li><a href="{{ route('admin.calendar.index') }}" class="{{ request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar"></i> Calendar View</a></li>
+        <li><a href="{{ route('admin.items', ['type' => 'food']) }}"><i class="fas fa-utensils"></i> Food Items</a></li>
+        <li><a href="{{ route('admin.items', ['type' => 'places']) }}"><i class="fas fa-map-marker-alt"></i> Event Places</a></li>
+        <li><a href="{{ route('admin.items', ['type' => 'designs']) }}"><i class="fas fa-palette"></i> Event Designs</a></li>
+    </ul>
+</nav>
 
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">Admin Panel</span>
