@@ -1,4 +1,5 @@
 
+
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -831,3 +832,143 @@ a[class*="btn"], button[class*="btn"] {
             color:#6c757d;
             font-size: .9rem;
         }
+/* ========================= */
+/* BABY PINK OVERRIDES */
+/* Put this at the VERY END of your CSS file */
+/* ========================= */
+
+:root{
+  --pink-main: #f4b6c2;   /* baby pink */
+  --pink-dark: #e89aaa;   /* hover / darker */
+  --pink-light:#fdecef;   /* light background */
+  --pink-text: #7a3b4c;   /* text accent */
+}
+
+/* Header + Footer gradients (was purple/blue) */
+header,
+footer{
+  background: linear-gradient(135deg, var(--pink-dark) 0%, var(--pink-main) 100%) !important;
+}
+
+/* Navbar links hover */
+nav a:hover{
+  background-color: rgba(255,255,255,0.18) !important;
+}
+
+/* HERO overlay (was purple/blue overlay) */
+.hero{
+  /* HERO overlay WITHOUT removing the image */
+.hero{
+  position: relative !important;
+}
+
+.hero::before{
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(
+    rgba(244, 182, 194, 0.60),
+    rgba(232, 154, 170, 0.60)
+  ) !important;
+  z-index: 1 !important;
+}
+
+/* Keep hero content above the overlay */
+ /* HERO overlay - FIXED */
+.hero{
+  position: relative !important;
+}
+
+.hero::before{
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(
+    rgba(244, 182, 194, 0.60),
+    rgba(232, 154, 170, 0.60)
+  ) !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+.hero > *{
+  position: relative !important;
+  z-index: 2 !important;
+}
+}
+
+/* Titles and accents (was #6a11cb) */
+.section-title h2,
+.form-title,
+.service-icon,
+th,
+.card-price,
+.form-section h3,
+.sum-total .value{
+  color: var(--pink-dark) !important;
+}
+
+/* Focus ring (was purple) */
+.form-control:focus{
+  border-color: var(--pink-dark) !important;
+  box-shadow: 0 0 0 2px rgba(244,182,194,0.35) !important;
+}
+
+/* Buttons */
+.btn-primary,
+.tab-active{
+  background-color: var(--pink-dark) !important;
+  border-color: var(--pink-dark) !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover,
+.tab-active:hover{
+  background-color: #de7f93 !important;
+  border-color: #de7f93 !important;
+}
+
+/* Sidebar active link (was purple background) */
+.sidebar-nav a:hover,
+.sidebar-nav a.active{
+  background-color: var(--pink-dark) !important;
+  color: #fff !important;
+}
+
+/* Cards gradients (was purple/blue) */
+.card-img{
+  background: linear-gradient(135deg, var(--pink-dark), var(--pink-main)) !important;
+}
+
+/* Selected states (was purple border/shadow) */
+.select-card.is-selected,
+.ce-card.is-selected{
+  border-color: var(--pink-dark) !important;
+  box-shadow: 0 16px 32px rgba(244,182,194,.35) !important;
+}
+
+.selected-badge,
+.ce-selected{
+  background: var(--pink-dark) !important;
+  color:#fff !important;
+}
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
+h1, h2, h3{
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+}
+
+p{
+    color: #6c757d;
+    font-size: 1rem;
+}
+/* Fix hero subtitle */
+.hero p{
+    color: #ffffff !important;          
+    font-weight: 500 !important;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.45);
+    opacity: 0.95 !important;
+}

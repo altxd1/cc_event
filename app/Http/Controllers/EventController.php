@@ -43,7 +43,7 @@ class EventController extends Controller
             'food_id' => ['required', 'integer'],
             'design_id' => ['required', 'integer'],
             'special_requests' => ['nullable', 'string', 'max:2000'],
-        ]); // https://laravel.com/docs/validation
+        ]); 
 
         // Date must be today or future (your old rule was "future"; we keep "today or future")
         if (Carbon::parse($data['event_date'])->startOfDay()->lt(now()->startOfDay())) {
