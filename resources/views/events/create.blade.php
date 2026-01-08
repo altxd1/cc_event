@@ -74,7 +74,11 @@
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                @if (function_exists('isAdmin') && isAdmin())
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                @else
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                @endif
             </ul>
         </nav>
 
@@ -162,16 +166,21 @@
                                  data-name="{{ $place->place_name }}"
                                  data-price="{{ $price }}"
                                  data-capacity="{{ $cap }}">
-                                <div class="ce-badge">${{ number_format($price, 2) }}</div>
+                                <div class="ce-badge">{{ \App\Helpers\CurrencyHelper::format($price) }}</div>
                                 <div class="ce-selected">Selected</div>
 
                                 <div class="ce-media">
+                                    @php
+                                        // Use the uploaded image_url if available; otherwise fallback to naming convention
+                                        $venueImgSrc = !empty($place->image_url)
+                                            ? asset($place->image_url)
+                                            : asset('images/venues/venue-'.$place->place_id.'.jpeg');
+                                    @endphp
                                     <img
-                                       src="{{ asset('images/venues/venue-'.$place->place_id.'.jpeg') }}"
-                                       alt="{{ $place->place_name }}"
-                                        onerror="this.onerror=null; this.src='{{ asset('images/venues/default.jpeg') }}';"
-                                      >
-                                        </div>
+                                        src="{{ $venueImgSrc }}"
+                                        alt="{{ $place->place_name }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('images/venues/default.jpeg') }}';">
+                                </div>
 
                                 <div class="ce-body">
                                     <h4 class="ce-title">{{ $place->place_name }}</h4>
@@ -205,16 +214,20 @@
                                  data-group="food"
                                  data-name="{{ $food->food_name }}"
                                  data-price-per-person="{{ $pp }}">
-                                <div class="ce-badge">${{ number_format($pp, 2) }} / person</div>
+                                <div class="ce-badge">{{ \App\Helpers\CurrencyHelper::format($pp) }} / person</div>
                                 <div class="ce-selected">Selected</div>
 
                                 <div class="ce-media">
-                                 <img
-                                    src="{{ asset('images/foods/food-'.$food->food_id.'.jpeg') }}"
-                                    alt="{{ $food->food_name }}"
-                                    onerror="this.onerror=null; this.src='{{ asset('images/foods/default.jpeg') }}';"
-                                        >
-                                        </div>
+                                    @php
+                                        $foodImgSrc = !empty($food->image_url)
+                                            ? asset($food->image_url)
+                                            : asset('images/foods/food-'.$food->food_id.'.jpeg');
+                                    @endphp
+                                    <img
+                                        src="{{ $foodImgSrc }}"
+                                        alt="{{ $food->food_name }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('images/foods/default.jpeg') }}';">
+                                </div>
 
                                 <div class="ce-body">
                                     <h4 class="ce-title">{{ $food->food_name }}</h4>
@@ -247,16 +260,20 @@
                                  data-group="design"
                                  data-name="{{ $design->design_name }}"
                                  data-price="{{ $price }}">
-                                <div class="ce-badge">${{ number_format($price, 2) }}</div>
+                                <div class="ce-badge">{{ \App\Helpers\CurrencyHelper::format($price) }}</div>
                                 <div class="ce-selected">Selected</div>
 
                                 <div class="ce-media">
-                                <img
-                                    src="{{ asset('images/designs/design-'.$design->design_id.'.jpeg') }}"
-                                    alt="{{ $design->design_name }}"
-                                    onerror="this.onerror=null; this.src='{{ asset('images/designs/default.jpeg') }}';"
-                                >
-                            </div>
+                                    @php
+                                        $designImgSrc = !empty($design->image_url)
+                                            ? asset($design->image_url)
+                                            : asset('images/designs/design-'.$design->design_id.'.jpeg');
+                                    @endphp
+                                    <img
+                                        src="{{ $designImgSrc }}"
+                                        alt="{{ $design->design_name }}"
+                                        onerror="this.onerror=null; this.src='{{ asset('images/designs/default.jpeg') }}';">
+                                </div>
 
                                 <div class="ce-body">
                                     <h4 class="ce-title">{{ $design->design_name }}</h4>
@@ -273,6 +290,37 @@
                         @endforeach
                     </div>
                 </div>
+
+                {{-- PACKAGE --}}
+                {{-- <div class="form-section">
+                    <h3><i class="fas fa-gift"></i> Choose a Package (Optional)</h3>
+                    <div class="ce-grid">
+                        @foreach ($packages as $pkg)
+                            @php
+                                $pkgPrice = (float)$pkg->price;
+                            @endphp
+                            <div class="ce-card select-card"
+                                 data-group="package"
+                                 data-name="{{ $pkg->package_name }}"
+                                 data-price="{{ $pkgPrice }}">
+                                <div class="ce-badge">{{ \App\Helpers\CurrencyHelper::format($pkgPrice) }}</div>
+                                <div class="ce-selected">Selected</div>
+                                <div class="ce-body">
+                                    <h4 class="ce-title">{{ $pkg->package_name }}</h4>
+                                    <p class="ce-desc">{{ \Illuminate\Support\Str::limit($pkg->description ?? '', 80) }}</p>
+                                    <input class="ce-radio"
+                                           type="radio"
+                                           name="package_id"
+                                           value="{{ $pkg->package_id }}"
+                                           @checked(old('package_id') == $pkg->package_id)>
+                                </div>
+                            </div>
+                        @endforeach
+                        @if ($packages->isEmpty())
+                            <p>No packages available.</p>
+                        @endif
+                    </div>
+                </div> --}}
 
                 {{-- Notes --}}
                 <div class="form-section">
@@ -303,22 +351,27 @@
 
                 <div class="sum-line">
                     <div><strong>Venue</strong><small id="sum-place-name">Not selected</small></div>
-                    <div id="sum-place-price">$0.00</div>
+                    <div id="sum-place-price">{{ \App\Helpers\CurrencyHelper::format(0) }}</div>
                 </div>
 
                 <div class="sum-line">
                     <div><strong>Menu</strong><small id="sum-food-name">Not selected</small></div>
-                    <div id="sum-food-price">$0.00</div>
+                    <div id="sum-food-price">{{ \App\Helpers\CurrencyHelper::format(0) }}</div>
                 </div>
 
                 <div class="sum-line">
                     <div><strong>Design</strong><small id="sum-design-name">Not selected</small></div>
-                    <div id="sum-design-price">$0.00</div>
+                    <div id="sum-design-price">{{ \App\Helpers\CurrencyHelper::format(0) }}</div>
+                </div>
+
+                <div class="sum-line">
+                    <div><strong>Package</strong><small id="sum-package-name">Not selected</small></div>
+                    <div id="sum-package-price">{{ \App\Helpers\CurrencyHelper::format(0) }}</div>
                 </div>
 
                 <div class="sum-total">
                     <div><strong>Total</strong></div>
-                    <div class="value" id="sum-total">$0.00</div>
+                    <div class="value" id="sum-total">{{ \App\Helpers\CurrencyHelper::format(0) }}</div>
                 </div>
 
                 <div class="sum-warning" id="cap-warning"></div>
@@ -358,6 +411,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const sumFoodPrice = document.getElementById('sum-food-price');
     const sumDesignName = document.getElementById('sum-design-name');
     const sumDesignPrice = document.getElementById('sum-design-price');
+    const sumPackageName = document.getElementById('sum-package-name');
+    const sumPackagePrice = document.getElementById('sum-package-price');
     const sumTotal = document.getElementById('sum-total');
     const capWarn = document.getElementById('cap-warning');
     
@@ -366,7 +421,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function money(x){
         const n = Number(x || 0);
-        return '$' + n.toFixed(2);
+        // Format number with grouping separators and two decimals, then prefix with MAD
+        const formatted = n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return 'MAD ' + formatted;
     }
 
     function getSelected(group) {
@@ -390,8 +447,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const place = getSelected('place');
         const food = getSelected('food');
         const design = getSelected('design');
+        const pkg = getSelected('package');
 
-        let placePrice = 0, foodPP = 0, designPrice = 0;
+        let placePrice = 0, foodPP = 0, designPrice = 0, packagePrice = 0;
 
         if (place) {
             sumPlaceName.textContent = place.dataset.name || 'Selected';
@@ -420,7 +478,35 @@ document.addEventListener('DOMContentLoaded', function () {
             sumDesignPrice.textContent = money(0);
         }
 
-        const total = placePrice + (foodPP * guests) + designPrice;
+        // Package
+        if (pkg) {
+            sumPackageName.textContent = pkg.dataset.name || 'Selected';
+            packagePrice = parseFloat(pkg.dataset.price || '0');
+            sumPackagePrice.textContent = money(packagePrice);
+        } else {
+            sumPackageName.textContent = 'Not selected';
+            sumPackagePrice.textContent = money(0);
+        }
+
+        let total = placePrice + (foodPP * guests) + designPrice + packagePrice;
+
+        // Apply dynamic pricing adjustments client‑side. If an event date is
+        // selected, add a 10% surcharge for weekends (Saturday/Sunday) and
+        // a 20% seasonal surcharge for June–August. Note that server-side
+        // validation will recalculate the total to ensure accuracy.
+        const eventDateStr = eventDateEl?.value;
+        if (eventDateStr) {
+            const dt = new Date(eventDateStr + 'T00:00:00');
+            const day = dt.getUTCDay(); // 0 = Sunday, 6 = Saturday
+            const month = dt.getUTCMonth() + 1; // JS month (1-12)
+            if (day === 0 || day === 6) {
+                total *= 1.10;
+            }
+            if ([6,7,8].includes(month)) {
+                total *= 1.20;
+            }
+        }
+
         sumTotal.textContent = money(total);
 
         // capacity warning

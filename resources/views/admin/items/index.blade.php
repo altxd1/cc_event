@@ -30,13 +30,7 @@
             <i class="fas fa-glass-cheers"></i>
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
-        <nav>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.events.index') }}">Manage Events</a></li>
-                <li><a href="{{ route('admin.items', ['type' => $type]) }}" class="active">Manage Items</a></li>
-            </ul>
-        </nav>
+        <!-- Removed duplicate navigation from header; sidebar nav handles admin navigation -->
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">Admin Panel</span>
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
@@ -52,8 +46,10 @@
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="{{ route('admin.events.index') }}"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events.*') && !request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
+                    <!-- Calendar link for admins -->
+                    <li><a href="{{ route('admin.calendar.index') }}" class="{{ request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar"></i> Calendar</a></li>
 
                     <li>
                         <a href="{{ route('admin.items', ['type' => 'food']) }}" class="{{ $type === 'food' ? 'active' : '' }}">
@@ -116,7 +112,7 @@
                             @if ($cfg['has_capacity'])
                                 <th>Capacity</th>
                             @endif
-                            <th>Price</th>
+                            <th>{{ $cfg['price_label'] }}</th>
                             @if ($hasIsAvailable)
                                 <th>Status</th>
                             @endif
@@ -147,7 +143,7 @@
                                 @endif
 
                                 <td>
-                                    ${{ number_format((float)$price, 2) }}
+                                    {{ \App\Helpers\CurrencyHelper::format($price) }}
                                     @if ($type === 'food')
                                         <br><small>per person</small>
                                     @endif

@@ -18,21 +18,30 @@
 
         <nav>
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-        <li><a href="{{ route('events.create') }}">Create Event</a></li>
-        <li><a href="{{ route('calendar.index') }}">Calendar</a></li> <!-- Add this line -->
+        <!-- Default navigation links accessible to all visitors -->
+        <li><a href="{{ url('/') }}">Home</a></li>
+        <li><a href="{{ url('/') }}#services">Services</a></li>
+        <li><a href="{{ url('/') }}#about">About</a></li>
+        <li><a href="{{ url('/') }}#contact">Contact</a></li>
+
+        @if (function_exists('isAdmin') && isAdmin())
+            <!-- Admin navigation: provide a single link to the admin dashboard -->
+            <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+            <!-- Admin-specific management links are available in the admin panel sidebar -->
+        @elseif (function_exists('isLoggedIn') && isLoggedIn())
+            <!-- Logged in user navigation -->
+            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ route('events.create') }}">Create Event</a></li>
+            <!-- Calendar, Inbox, Notifications are accessible via the dashboard sidebar -->
+        @endif
     </ul>
     </nav>
 
         <div class="auth-buttons">
             @if (function_exists('isLoggedIn') && isLoggedIn())
-                @if (function_exists('isAdmin') && isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Admin Dashboard</a>
-                @else
-                    <a href="{{ route('dashboard') }}" class="btn btn-primary">My Dashboard</a>
-                @endif
-
+                <span style="color: white; margin-right: 1rem;">
+                    {{ function_exists('isAdmin') && isAdmin() ? 'Admin Panel' : 'Welcome, '.(session('full_name') ?? 'User') }}
+                </span>
                 <form method="POST" action="{{ route('logout') }}" style="display:inline;">
                     @csrf
                     <button type="submit" class="btn btn-secondary">Logout</button>

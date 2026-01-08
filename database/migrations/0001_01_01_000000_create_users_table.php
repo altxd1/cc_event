@@ -12,13 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            // Use a custom primary key of user_id instead of the default id
+            $table->bigIncrements('user_id');
+            // Unique username used for login in addition to email
+            $table->string('username')->unique();
+            // The user's full name
+            $table->string('full_name');
+            // Email address must be unique
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            // Optional phone number
+            $table->string('phone')->nullable();
+            // Password hash
             $table->string('password');
+            // Role or account type (e.g. admin or user) defaults to user
+            $table->string('user_type')->default('user');
+            // Timestamp for email verification
+            $table->timestamp('email_verified_at')->nullable();
+            // Remember token for "remember me" functionality
             $table->rememberToken();
-            $table->timestamps();
+            // Explicitly define created_at and updated_at instead of using $table->timestamps()
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
@@ -29,7 +43,8 @@ return new class extends Migration
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            // Use unsignedBigInteger to reference our custom user_id column
+            $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

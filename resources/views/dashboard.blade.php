@@ -16,12 +16,7 @@
             <a href="/" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
 
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/events/create">Create Event</a></li>
-            </ul>
-        </nav>
+        <!-- Removed top navigation from user dashboard; sidebar nav handles navigation -->
 
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">
@@ -35,35 +30,7 @@
         </div>
     </div>
 </header>
-<!-- Add this section to your dashboard -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i> Calendar Overview</h5>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-8">
-                <p>View venue availability and booked dates in the calendar.</p>
-                <a href="{{ route('calendar.index') }}" class="btn btn-primary">
-                    <i class="fas fa-calendar me-2"></i> View Full Calendar
-                </a>
-                <a href="{{ route('events.create') }}" class="btn btn-success ms-2">
-                    <i class="fas fa-plus-circle me-2"></i> Book New Event
-                </a>
-            </div>
-            <div class="col-md-4">
-                <div class="text-center">
-                    <div class="display-6 fw-bold text-primary">
-                        {{ \App\Models\Event::whereIn('status', ['approved', 'pending'])
-                            ->whereMonth('event_date', date('m'))
-                            ->count() }}
-                    </div>
-                    <small class="text-muted">Events this month</small>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Removed calendar overview from the dashboard. Navigation to the calendar is available via the sidebar. -->
 
 <div class="container">
     <div class="dashboard-container">
@@ -71,7 +38,14 @@
             <nav class="sidebar-nav">
                 <ul>
                     <li><a href="{{ route('dashboard') }}" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="/events/create"><i class="fas fa-calendar-plus"></i> Create New Event</a></li>
+                    <li><a href="{{ route('events.create') }}"><i class="fas fa-calendar-plus"></i> Create New Event</a></li>
+                    <li><a href="{{ route('calendar.index') }}"><i class="fas fa-calendar"></i> Calendar</a></li>
+                    @if (Route::has('messages.index'))
+                        <li><a href="{{ route('messages.index') }}"><i class="fas fa-inbox"></i> Inbox</a></li>
+                    @endif
+                    @if (Route::has('notifications.index'))
+                        <li><a href="{{ route('notifications.index') }}"><i class="fas fa-bell"></i> Notifications</a></li>
+                    @endif
                 </ul>
             </nav>
         </aside>
@@ -93,6 +67,7 @@
                 </div>
             @else
                 @php
+                    // Default status colors for paid events
                     $status_colors = [
                         'pending' => '#ffc107',
                         'approved' => '#28a745',
@@ -124,9 +99,14 @@
                                 </td>
                                 <td>{{ $event->place_name }}</td>
                                 <td>{{ $event->number_of_guests }}</td>
-                                <td>${{ number_format((float)$event->total_price, 2) }}</td>
+                                <td>{{ \App\Helpers\CurrencyHelper::format($event->total_price) }}</td>
                                 <td>
-                                    @php $color = $status_colors[$event->status] ?? '#6c757d'; @endphp
+                                    @php
+                                        // Use teal for unpaid events, otherwise use status color
+                                        $color = $event->is_paid
+                                            ? ($status_colors[$event->status] ?? '#6c757d')
+                                            : '#17a2b8';
+                                    @endphp
                                     <span style="
                                         background-color: {{ $color }};
                                         color: white;
@@ -139,10 +119,18 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a class="btn btn-primary" style="padding: 0.25rem 0.5rem;"
-                                    href="{{ route('events.show', $event->event_id) }}">
-                                    <i class="fas fa-eye"></i> View
-                                </a>
+                                    <div style="display:flex; gap:0.25rem; flex-wrap:wrap;">
+                                        <a class="btn btn-primary" style="padding: 0.25rem 0.5rem;"
+                                           href="{{ route('events.show', $event->event_id) }}">
+                                            <i class="fas fa-eye"></i> View
+                                        </a>
+                                        @if (!$event->is_paid)
+                                            <a class="btn btn-success" style="padding: 0.25rem 0.5rem;" href="{{ route('events.payment.show', ['eventId' => $event->event_id]) }}">
+                                                <i class="fas fa-credit-card"></i> Pay Now
+                                            </a>
+                                        @endif
+                                        <!-- Removed cancel functionality. Users can no longer cancel events from the dashboard. -->
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

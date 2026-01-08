@@ -12,6 +12,8 @@ if (! function_exists('isLoggedIn')) {
 if (! function_exists('isAdmin')) {
     function isAdmin(): bool
     {
-        return Session::get('user_type') === 'admin';
+        $role = strtolower((string) Session::get('user_type'));
+        // Treat both 'admin' and 'event_manager' roles as having admin privileges.
+        return in_array($role, ['admin', 'event_manager'], true);
     }
 }

@@ -49,19 +49,19 @@
         <div class="form-section">
             <h4>Venue</h4>
             <p><strong>Place:</strong> {{ $event->place_name }}</p>
-            <p><strong>Price:</strong> ${{ number_format((float)$event->place_price, 2) }}</p>
+            <p><strong>Price:</strong> {{ \App\Helpers\CurrencyHelper::format($event->place_price) }}</p>
         </div>
 
         <div class="form-section">
             <h4>Food</h4>
             <p><strong>Menu:</strong> {{ $event->food_name }}</p>
-            <p><strong>Price/Person:</strong> ${{ number_format((float)$event->price_per_person, 2) }}</p>
+            <p><strong>Price/Person:</strong> {{ \App\Helpers\CurrencyHelper::format($event->price_per_person) }}</p>
         </div>
 
         <div class="form-section">
             <h4>Design</h4>
             <p><strong>Theme:</strong> {{ $event->design_name }}</p>
-            <p><strong>Price:</strong> ${{ number_format((float)$event->design_price, 2) }}</p>
+            <p><strong>Price:</strong> {{ \App\Helpers\CurrencyHelper::format($event->design_price) }}</p>
         </div>
 
         <div class="form-section">
@@ -73,7 +73,7 @@
     <div class="form-section" style="background-color:#e3f2fd;">
         <h4>Total</h4>
         <p style="font-size: 1.4rem; font-weight: bold; color: #6a11cb;">
-            ${{ number_format((float)$event->total_price, 2) }}
+            {{ \App\Helpers\CurrencyHelper::format($event->total_price) }}
         </p>
     </div>
 

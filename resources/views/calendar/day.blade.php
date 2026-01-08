@@ -157,7 +157,7 @@
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div>
                                         <strong class="text-primary">
-                                            ${{ number_format($event->total_price, 2) }}
+                                            {{ \App\Helpers\CurrencyHelper::format($event->total_price) }}
                                         </strong>
                                     </div>
                                     <div>
@@ -209,7 +209,7 @@
                     <div class="card-body text-center">
                         <h6 class="text-muted mb-2">Total Revenue</h6>
                         <div class="display-6 fw-bold text-danger">
-                            ${{ number_format($events->sum('total_price'), 2) }}
+                            {{ \App\Helpers\CurrencyHelper::format($events->sum('total_price')) }}
                         </div>
                     </div>
                 </div>

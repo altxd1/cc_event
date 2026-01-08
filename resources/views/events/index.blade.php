@@ -142,7 +142,7 @@
                                 </td>
                                 <td>{{ $event->place_name }}</td>
                                 <td>{{ $event->number_of_guests }}</td>
-                                <td>${{ number_format((float)$event->total_price, 2) }}</td>
+                                <td>{{ \App\Helpers\CurrencyHelper::format($event->total_price) }}</td>
                                 <td>
                                     @php $color = $status_colors[$event->status] ?? '#6c757d'; @endphp
                                     <span style="

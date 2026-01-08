@@ -35,13 +35,7 @@
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">EventPro</a>
         </div>
 
-        <nav>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.events.index') }}" class="active">Manage Events</a></li>
-                <li><a href="{{ route('admin.items', ['type' => 'food']) }}">Manage Items</a></li>
-            </ul>
-        </nav>
+        <!-- Removed duplicate navigation from header; sidebar nav handles admin navigation -->
 
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">Admin Panel</span>
@@ -58,11 +52,14 @@
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="{{ route('admin.events.index') }}" class="active"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
-                    <li><a href="{{ route('admin.items', ['type' => 'food']) }}"><i class="fas fa-utensils"></i> Food Items</a></li>
-                    <li><a href="{{ route('admin.items', ['type' => 'places']) }}"><i class="fas fa-map-marker-alt"></i> Event Places</a></li>
-                    <li><a href="{{ route('admin.items', ['type' => 'designs']) }}"><i class="fas fa-palette"></i> Event Designs</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events.*') && !request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
+                    <!-- Calendar link -->
+                    <li><a href="{{ route('admin.calendar.index') }}" class="{{ request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar"></i> Calendar</a></li>
+                    <li><a href="{{ route('admin.items', ['type' => 'food']) }}" class="{{ request()->fullUrlIs('*type=food*') ? 'active' : '' }}"><i class="fas fa-utensils"></i> Food Items</a></li>
+                    <li><a href="{{ route('admin.items', ['type' => 'places']) }}" class="{{ request()->fullUrlIs('*type=places*') ? 'active' : '' }}"><i class="fas fa-map-marker-alt"></i> Event Places</a></li>
+                    <li><a href="{{ route('admin.items', ['type' => 'designs']) }}" class="{{ request()->fullUrlIs('*type=designs*') ? 'active' : '' }}"><i class="fas fa-palette"></i> Event Designs</a></li>
+                    <li><a href="{{ route('admin.messages.index') }}" class="{{ request()->routeIs('admin.messages.*') ? 'active' : '' }}"><i class="fas fa-inbox"></i> Inbox</a></li>
                 </ul>
             </nav>
         </aside>
@@ -143,7 +140,7 @@
                                 </td>
                                 <td>{{ $event->place_name }}</td>
                                 <td>{{ $event->number_of_guests }}</td>
-                                <td>${{ number_format((float)$event->total_price, 2) }}</td>
+                                <td>{{ \App\Helpers\CurrencyHelper::format($event->total_price) }}</td>
                                 <td>
                                     @php $color = $status_colors[$event->status] ?? '#6c757d'; @endphp
                                     <span style="

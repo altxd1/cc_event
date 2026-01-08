@@ -16,13 +16,7 @@
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events Admin</a>
         </div>
         
-        <nav>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.events.index') }}">Manage Events</a></li>
-                <li><a href="{{ route('admin.calendar.index') }}">Calendar</a></li>
-            </ul>
-        </nav>
+        <!-- Removed duplicate navigation from header; sidebar nav handles admin navigation -->
         
         <div class="auth-buttons">
             <form method="POST" action="{{ route('logout') }}" style="display:inline;">
@@ -38,9 +32,13 @@
         <aside class="sidebar">
             <nav class="sidebar-nav">
                 <ul>
-                    <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="{{ route('admin.events.index') }}"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
-                    <li><a href="{{ route('admin.calendar.index') }}" class="active"><i class="fas fa-calendar"></i> Calendar</a></li>
+                    <li><a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events.*') && !request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar-alt"></i> Manage Events</a></li>
+                    <li><a href="{{ route('admin.calendar.index') }}" class="{{ request()->routeIs('admin.calendar.*') ? 'active' : '' }}"><i class="fas fa-calendar"></i> Calendar</a></li>
+                    <li><a href="{{ route('admin.items', ['type' => 'food']) }}" class="{{ request()->fullUrlIs('*type=food*') ? 'active' : '' }}"><i class="fas fa-utensils"></i> Food Items</a></li>
+                    <li><a href="{{ route('admin.items', ['type' => 'places']) }}" class="{{ request()->fullUrlIs('*type=places*') ? 'active' : '' }}"><i class="fas fa-map-marker-alt"></i> Event Places</a></li>
+                    <li><a href="{{ route('admin.items', ['type' => 'designs']) }}" class="{{ request()->fullUrlIs('*type=designs*') ? 'active' : '' }}"><i class="fas fa-palette"></i> Event Designs</a></li>
+                    <li><a href="{{ route('admin.packages.index') }}" class="{{ request()->routeIs('admin.packages.*') ? 'active' : '' }}"><i class="fas fa-gift"></i> Packages</a></li>
                 </ul>
             </nav>
         </aside>
@@ -102,7 +100,7 @@
                                     
                                     <div class="mb-3">
                                         <small class="text-muted">Total</small>
-                                        <div><strong>${{ number_format($event->total_price, 2) }}</strong></div>
+                                        {{ \App\Helpers\CurrencyHelper::format($event->total_price) }}
                                     </div>
                                 </div>
                                 <div class="card-footer">

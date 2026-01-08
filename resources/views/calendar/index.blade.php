@@ -220,17 +220,32 @@
         <nav>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('events.create') }}">Create Event</a></li>
-                <li><a href="{{ route('calendar.index') }}" class="active">Calendar</a></li>
+                @if (function_exists('isAdmin') && isAdmin())
+                    <!-- Admin navigation -->
+                    <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('admin.events.index') }}">Manage Events</a></li>
+                    <li><a href="{{ route('admin.calendar.index') }}" class="active">Calendar</a></li>
+                @else
+                    <!-- User navigation -->
+                    <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ route('events.create') }}">Create Event</a></li>
+                    <li><a href="{{ route('calendar.index') }}" class="active">Calendar</a></li>
+                @endif
             </ul>
         </nav>
         <div class="auth-buttons">
-            <span style="color: white; margin-right: 1rem;">Welcome, {{ session('full_name') }}</span>
-            <form method="POST" action="{{ route('logout') }}" style="display:inline;">
-                @csrf
-                <button type="submit" class="btn btn-secondary">Logout</button>
-            </form>
+            @if (function_exists('isLoggedIn') && isLoggedIn())
+                <span style="color: white; margin-right: 1rem;">
+                    {{ function_exists('isAdmin') && isAdmin() ? 'Admin Panel' : 'Welcome, '.(session('full_name') ?? 'User') }}
+                </span>
+                <form method="POST" action="{{ route('logout') }}" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login.form') }}" class="btn btn-primary">Login</a>
+                <a href="{{ route('register.form') }}" class="btn btn-secondary">Register</a>
+            @endif
         </div>
     </div>
 </header>
@@ -469,7 +484,7 @@
                         </div>
                         <div class="col-6 mt-3">
                             <small class="text-muted">Total Revenue</small>
-                            <div class="stats-number">${{ number_format($monthlyStats['total_revenue'] ?? 0, 2) }}</div>
+                            <div class="stats-number">{{ \App\Helpers\CurrencyHelper::format($monthlyStats['total_revenue'] ?? 0) }}</div>
                         </div>
                         <div class="col-6 mt-3">
                             <small class="text-muted">Unique Dates</small>

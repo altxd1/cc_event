@@ -45,7 +45,7 @@
     $priceCol = $cfg['price_col'] ?? ($cfg['price'] ?? null);
 
     $hasCapacity = (bool)($cfg['has_capacity'] ?? ($type === 'places'));
-    $priceLabel = $cfg['price_label'] ?? ($type === 'food' ? 'Price per Person ($)' : 'Price ($)');
+    $priceLabel = $cfg['price_label'] ?? ($type === 'food' ? 'Price per Person (MAD)' : 'Price (MAD)');
 @endphp
 
 <header>
@@ -55,13 +55,7 @@
             <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
 
-        <nav>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ route('admin.events.index') }}">Manage Events</a></li>
-                <li><a href="{{ route('admin.items', ['type' => $type]) }}" class="active">Manage Items</a></li>
-            </ul>
-        </nav>
+        <!-- Removed duplicate navigation from header; sidebar nav handles admin navigation -->
 
         <div class="auth-buttons">
             <span style="color: white; margin-right: 1rem;">Admin Panel</span>
@@ -131,11 +125,31 @@
             <label>Image</label>
             <input type="file" name="image" class="form-control" accept="image/*">
 
-            @if ($item && !empty($item->image_path))
-                <div>
-                    <small>Current image:</small>
-                    <img class="img-preview" src="{{ asset('storage/'.$item->image_path) }}" alt="Current image">
-                </div>
+            @if ($item)
+                @php
+                    // Determine current image source if available
+                    $currentSrc = null;
+                    if (!empty($item->image_url)) {
+                        $currentSrc = asset($item->image_url);
+                    } elseif (!empty($item->image_path)) {
+                        // For legacy items that still use image_path, prepend storage directory
+                        $currentSrc = asset($item->image_path);
+                    }
+                @endphp
+                @if ($currentSrc)
+                    <div>
+                        <small>Current image:</small>
+                        <img class="img-preview" src="{{ $currentSrc }}" alt="Current image">
+                    </div>
+                    <div style="margin-top:0.5rem;">
+                        <label>
+                            <input type="checkbox" name="remove_image" value="1">
+                            Remove current image
+                        </label>
+                    </div>
+                @else
+                    <small>No current image uploaded.</small>
+                @endif
             @endif
         </div>
 

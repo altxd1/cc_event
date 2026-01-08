@@ -19,6 +19,8 @@ class FoodItem extends Model
         'description',
         'price_per_person',
         'is_available',
+        // Allow storing an optional image URL for the food item
+        'image_url',
     ];
 
     protected $casts = [

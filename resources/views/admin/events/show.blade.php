@@ -33,30 +33,30 @@
             <h4>Venue</h4>
             <p><strong>Place:</strong> {{ $event->place_name }}</p>
             <p><strong>Capacity:</strong> {{ $event->place_capacity }} guests</p>
-            <p><strong>Price:</strong> ${{ number_format((float)$event->place_price, 2) }}</p>
+            <p><strong>Price:</strong> {{ \App\Helpers\CurrencyHelper::format($event->place_price) }}</p>
         </div>
 
         <div class="form-section">
             <h4>Food & Design</h4>
             <p><strong>Menu:</strong> {{ $event->food_name }}</p>
-            <p><strong>Food Price/Person:</strong> ${{ number_format((float)$event->food_price_per_person, 2) }}</p>
+            <p><strong>Food Price/Person:</strong> {{ \App\Helpers\CurrencyHelper::format($event->food_price_per_person) }}</p>
             <p><strong>Design:</strong> {{ $event->design_name }}</p>
-            <p><strong>Design Price:</strong> ${{ number_format((float)$event->design_price, 2) }}</p>
+           <p><strong>Design Price:</strong> {{ \App\Helpers\CurrencyHelper::format($event->design_price) }}</p>
             <p><strong>Special Requests:</strong> {{ $event->special_requests ?: 'None' }}</p>
         </div>
     </div>
 
-    <div class="form-section" style="background-color:#e3f2fd;">
-        <h4>Pricing Breakdown</h4>
-        <p>Venue: ${{ number_format((float)$event->place_price, 2) }}</p>
-        <p>
-            Food ({{ $event->number_of_guests }} × ${{ number_format((float)$event->food_price_per_person, 2) }}):
-            ${{ number_format((float)$event->food_price_per_person * (int)$event->number_of_guests, 2) }}
-        </p>
-        <p>Design: ${{ number_format((float)$event->design_price, 2) }}</p>
-        <hr>
-        <p><strong>Total: ${{ number_format((float)$event->total_price, 2) }}</strong></p>
-    </div>
+   <div class="form-section" style="background-color:#e3f2fd;">
+    <h4>Pricing Breakdown</h4>
+    <p>Venue: {{ \App\Helpers\CurrencyHelper::format($event->place_price) }}</p>
+    <p>
+        Food ({{ $event->number_of_guests }} × {{ \App\Helpers\CurrencyHelper::format($event->food_price_per_person) }}):
+        {{ \App\Helpers\CurrencyHelper::format($event->food_price_per_person * (int)$event->number_of_guests) }}
+    </p>
+    <p>Design: {{ \App\Helpers\CurrencyHelper::format($event->design_price) }}</p>
+    <hr>
+    <p><strong>Total: {{ \App\Helpers\CurrencyHelper::format($event->total_price) }}</strong></p>
+</div>
 
     <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">Back</a>
 </div>
