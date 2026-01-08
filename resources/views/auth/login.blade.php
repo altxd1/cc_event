@@ -13,7 +13,7 @@
     <div class="container header-container">
         <div class="logo">
             <i class="fas fa-glass-cheers"></i>
-            <a href="/" style="color: white; text-decoration: none;">EventPro</a>
+            <a href="/" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
         <nav>
             <ul>

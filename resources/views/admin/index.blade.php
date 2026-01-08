@@ -32,7 +32,7 @@
     <div class="container header-container">
         <div class="logo">
             <i class="fas fa-glass-cheers"></i>
-            <a href="{{ url('/') }}" style="color: white; text-decoration: none;">EventPro</a>
+            <a href="{{ url('/') }}" style="color: white; text-decoration: none;">BMW Events</a>
         </div>
 
         <!-- Removed duplicate navigation from header; sidebar nav handles admin navigation -->

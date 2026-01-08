@@ -31,7 +31,7 @@
         @elseif (function_exists('isLoggedIn') && isLoggedIn())
             <!-- Logged in user navigation -->
             <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ route('events.create') }}">Create Event</a></li>
+            {{-- <li><a href="{{ route('events.create') }}">Create Event</a></li> --}}
             <!-- Calendar, Inbox, Notifications are accessible via the dashboard sidebar -->
         @endif
     </ul>
@@ -134,7 +134,7 @@
 <section id="about" class="services" style="background-color: #f8f9fa;">
     <div class="container">
         <div class="section-title">
-            <h2>Why Choose EventPro?</h2>
+            <h2>Why Choose BMW Events?</h2>
             <p>Experience the difference with our professional event management</p>
         </div>
 
