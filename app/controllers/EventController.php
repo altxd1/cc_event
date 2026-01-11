@@ -114,13 +114,7 @@ class EventController extends Controller
             ->with('success', 'Event created successfully! Please proceed with payment to confirm your booking.');
     }
 
-    /**
-     * Cancel an event. Users can cancel an event subject to the cancellation
-     * policy: full refund if cancelled 7 days or more before the event,
-     * otherwise no refund. This endpoint updates the status and issues
-     * a refund placeholder (actual refund integration would be handled
-     * via the payment gateway).
-     */
+   
     public function cancel(Request $request, $id)
     {
         $event = Event::where('event_id', $id)

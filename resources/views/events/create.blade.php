@@ -292,7 +292,7 @@
                 </div>
 
                 {{-- PACKAGE --}}
-                {{-- <div class="form-section">
+                <div class="form-section">
                     <h3><i class="fas fa-gift"></i> Choose a Package (Optional)</h3>
                     <div class="ce-grid">
                         @foreach ($packages as $pkg)
@@ -320,7 +320,7 @@
                             <p>No packages available.</p>
                         @endif
                     </div>
-                </div> --}}
+                </div>
 
                 {{-- Notes --}}
                 <div class="form-section">

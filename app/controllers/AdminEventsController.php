@@ -80,7 +80,7 @@ class AdminEventsController extends Controller
                 'p.place_name',
                 'f.food_name',
                 'd.design_name',
-                \DB::raw('CASE WHEN pay.payment_id IS NULL THEN 0 ELSE 1 END as is_paid'),
+                DB::raw('CASE WHEN pay.payment_id IS NULL THEN 0 ELSE 1 END as is_paid'),
             ]);
         } else {
             $query = $query->select([
@@ -97,7 +97,7 @@ class AdminEventsController extends Controller
                 'p.place_name',
                 'f.food_name',
                 'd.design_name',
-                \DB::raw('0 as is_paid'),
+                DB::raw('0 as is_paid'),
             ]);
         }
 

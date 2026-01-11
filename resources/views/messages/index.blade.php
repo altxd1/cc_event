@@ -19,14 +19,14 @@
                 <li><a href="/">Home</a></li>
                 @if(!empty($isAdmin) && $isAdmin)
                     <li><a href="{{ route('admin.dashboard') }}">Admin Dashboard</a></li>
-                    <li><a href="{{ route('admin.events.index') }}">Manage Events</a></li>
+                    {{-- <li><a href="{{ route('admin.events.index') }}">Manage Events</a></li>
                     <li><a href="{{ route('admin.items') }}">Manage Items</a></li>
-                    <li><a href="{{ route('admin.calendar.index') }}">Calendar</a></li>
+                    <li><a href="{{ route('admin.calendar.index') }}">Calendar</a></li> --}}
                     <li><a href="{{ route('admin.messages.create') }}">Compose</a></li>
                 @else
                     <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                    <li><a href="{{ route('events.create') }}">Create Event</a></li>
-                    <li><a href="{{ route('calendar.index') }}">Calendar</a></li>
+                    {{-- <li><a href="{{ route('events.create') }}">Create Event</a></li>
+                    <li><a href="{{ route('calendar.index') }}">Calendar</a></li> --}}
                     <li><a href="{{ route('messages.create') }}">Compose</a></li>
                 @endif
             </ul>
